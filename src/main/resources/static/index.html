@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+    <h2 class="logo">FinTrack<span>.</span></h2>
+
+    <p class="menu-label">MENU</p>
+    <a class="nav-link active" href="#">▦ &nbsp; Dashboard</a>
+    <a class="nav-link" href="#transactions">↔ &nbsp; Transactions</a>
+
+    <div class="sidebar-bottom">
+        <div class="avatar">S</div>
+        <div>
+            <strong>My Finance</strong>
+            <p>Personal account</p>
+        </div>
+    </div>
+</aside>
+
+<main class="main-content">
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">OVERVIEW</p>
+            <h1>Dashboard</h1>
+            <p class="subtitle">Welcome back! Here's your financial overview.</p>
+        </div>
+        <div class="header-actions">
+            <button class="primary-button" id="addTransactionBtn">+ Add transaction</button>
+        </div>
+    </header>
+
+
+    <section class="main-account-section">
+        <div class="main-account-card">
+            <p class="main-account-label">MAIN ACCOUNT</p>
+            <h2 id="mainAccountBalance">0.00 MKD</h2>
+            <p class="main-account-description">
+                Total balance across all your accounts and cash
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2>My Accounts</h2>
+        <p class="subtitle">Your banks, cash and crypto wallets</p>
+
+        <div class="summary-grid" id="accountsGrid"></div>
+    </section>
+
+
+    <section class="transactions-panel" id="transactions">
+        <div class="panel-header">
+            <div>
+                <h2>Recent transactions</h2>
+                <p>Your latest financial activity</p>
+            </div>
+            <button class="refresh-button" id="refreshBtn">↻ Refresh</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>TRANSACTION</th>
+                    <th>CATEGORY</th>
+                    <th>DATE</th>
+                    <th>TYPE</th>
+                    <th class="amount-column">AMOUNT</th>
+                </tr>
+                </thead>
+                <tbody id="transactionsBody">
+                <tr>
+                    <td colspan="5" class="empty-state">Loading transactions...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p id="statusMessage" class="status-message"></p>
+    </section>
+
+    <section class="form-panel hidden" id="accountFormPanel">
+        <div class="panel-header">
+            <div>
+                <h2>Add Account</h2>
+                <p>Create a bank account, cash wallet, or crypto account</p>
+            </div>
+            <button type="button" class="refresh-button" id="closeAccountFormBtn">
+                ✕ Close
+            </button>
+        </div>
+
+        <form id="accountForm">
+            <label for="accountName">Account name</label>
+            <input id="accountName" name="name" required
+                   placeholder="e.g. Bank of America">
+
+            <label for="accountType">Account type</label>
+            <input id="accountType" name="type" required
+                   placeholder="e.g. BANK, CASH, CRYPTO, Savings">
+
+            <label for="accountCurrency">Currency</label>
+            <input id="accountCurrency" name="currency" required
+                   placeholder="e.g. MKD, EUR, USD, BTC">
+
+            <label for="accountBalance">Initial balance</label>
+            <input id="accountBalance" name="balance" type="number"
+                   min="0" step="any" value="0" required>
+
+            <label for="accountInstitution">Bank / Institution (optional)</label>
+            <input id="accountInstitution" name="institution"
+                   placeholder="e.g. Sparkasse, Binance">
+
+            <button class="primary-button" type="submit">Save account</button>
+            <p id="accountFormMessage" class="status-message"></p>
+        </form>
+    </section>
+
+    <section class="form-panel hidden" id="transactionFormPanel">
+
+        <div class="panel-header">
+            <div>
+                <h2>Add transaction</h2>
+                <p>Record income or an expense</p>
+            </div>
+            <button class="refresh-button" id="closeFormBtn">✕ Close</button>
+        </div>
+
+        <form id="transactionForm">
+            <label for="title">Title</label>
+            <input id="title" name="title" required placeholder="e.g. Salary or Groceries">
+
+            <label for="amount">Amount</label>
+            <input id="amount" name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00">
+
+            <label for="type">Transaction type</label>
+            <select id="type" name="type" required>
+                <option value="EXPENSE">Expense</option>
+                <option value="INCOME">Income</option>
+            </select>
+
+            <label for="accountId">Account</label>
+            <select id="accountId" name="accountId" required>
+                <option value="">Loading accounts...</option>
+            </select>
+
+            <label for="category">Category</label>
+            <input id="category" name="category" placeholder="e.g. Food, Work">
+
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required>
+
+            <button class="primary-button" type="submit">Save transaction</button>
+            <p id="formMessage" class="status-message"></p>
+        </form>
+    </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
