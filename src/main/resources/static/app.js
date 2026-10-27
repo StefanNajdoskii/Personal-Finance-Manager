@@ -476,3 +476,153 @@ accountForm.addEventListener("submit", async event => {
         submitButton.textContent = "Save account";
     }
 });
+// ==============================
+// SETTINGS: THEME AND LANGUAGE
+// ==============================
+
+const translations = {
+    en: {
+        menu: "MENU",
+        dashboard: "Dashboard",
+        transactions: "Transactions",
+        settings: "Settings",
+        personalAccount: "Personal account",
+        overview: "OVERVIEW",
+        welcome: "Welcome back! Here's your financial overview.",
+        addTransaction: "+ Add transaction",
+        mainAccount: "MAIN ACCOUNT",
+        myAccounts: "My Accounts",
+        latestActivity: "Your latest financial activity",
+        recentTransactions: "Recent transactions",
+        refresh: "↻ Refresh",
+        customize: "Customize your application",
+        appearance: "Appearance",
+        themeDescription: "Choose light or dark theme",
+        lightTheme: "Light",
+        darkTheme: "Dark",
+        language: "Language",
+        languageDescription: "Choose your preferred language",
+        addAccount: "Add Account"
+    },
+
+    mk: {
+        menu: "МЕНИ",
+        dashboard: "Контролна табла",
+        transactions: "Трансакции",
+        settings: "Поставки",
+        personalAccount: "Лична сметка",
+        overview: "ПРЕГЛЕД",
+        welcome: "Добредојде! Еве го твојот финансиски преглед.",
+        addTransaction: "+ Додај трансакција",
+        mainAccount: "ГЛАВНА СМЕТКА",
+        myAccounts: "Мои сметки",
+        latestActivity: "Твоите последни финансиски активности",
+        recentTransactions: "Последни трансакции",
+        refresh: "↻ Освежи",
+        customize: "Прилагоди ја апликацијата",
+        appearance: "Изглед",
+        themeDescription: "Избери светла или темна тема",
+        lightTheme: "Светла",
+        darkTheme: "Темна",
+        language: "Јазик",
+        languageDescription: "Избери го претпочитаниот јазик",
+        addAccount: "Додај сметка"
+    }
+};
+
+function applyTranslations() {
+    const language = localStorage.getItem("financeLanguage") || "en";
+    const dictionary = translations[language] || translations.en;
+
+    document.documentElement.lang = language;
+
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+        const key = element.dataset.i18n;
+
+        if (dictionary[key]) {
+            element.textContent = dictionary[key];
+        }
+    });
+
+    document.title =
+        language === "mk"
+            ? "Менаџер за лични финансии"
+            : "Personal Finance Manager";
+}
+
+// Restore saved theme
+const savedTheme = localStorage.getItem("financeTheme") || "light";
+document.body.classList.toggle("dark-theme", savedTheme === "dark");
+
+const themeSelect = document.getElementById("themeSelect");
+const languageSelect = document.getElementById("languageSelect");
+
+if (themeSelect) {
+    themeSelect.value = savedTheme;
+
+    themeSelect.addEventListener("change", () => {
+        const theme = themeSelect.value;
+
+        document.body.classList.toggle("dark-theme", theme === "dark");
+        localStorage.setItem("financeTheme", theme);
+    });
+}
+
+// Restore saved language
+const savedLanguage = localStorage.getItem("financeLanguage") || "en";
+
+if (languageSelect) {
+    languageSelect.value = savedLanguage;
+
+    languageSelect.addEventListener("change", () => {
+        localStorage.setItem("financeLanguage", languageSelect.value);
+        applyTranslations();
+    });
+}
+// Bottom navigation
+document.querySelectorAll(".navigation .nav-link").forEach(link => {
+link.addEventListener("click", event => {
+    console.log("Mobile navigation clicked:", link.dataset.page);
+});
+    link.addEventListener("click", event => {
+        event.preventDefault();
+
+        const page = link.dataset.page;
+        const settings = document.getElementById("settings");
+        const transactions = document.getElementById("transactions");
+        console.log("Clicked page:", page);
+        document.body.classList.toggle(
+            "settings-open",
+            page === "settings"
+        );
+
+        document.querySelectorAll(".navigation .nav-link")
+            .forEach(navLink => {
+                navLink.classList.toggle("active", navLink === link);
+            });
+
+        if (page === "settings") {
+            settings.classList.remove("hidden");
+            settings.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        } else {
+            settings.classList.add("hidden");
+
+            if (page === "transactions") {
+                transactions.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            } else {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            }
+        }
+    });
+});
+
+applyTranslations();

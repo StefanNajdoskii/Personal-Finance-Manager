@@ -402,57 +402,62 @@ tbody tr:last-child td {
 
 @media (max-width: 720px) {
     .sidebar {
+        position: fixed;
+        z-index: 1000;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
         width: 100%;
         height: auto;
-        position: static;
-        padding: 18px;
+        box-sizing: border-box;
+        padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+        border-right: none;
+        border-top: 1px solid var(--border);
         display: block;
+        background: var(--surface);
     }
 
-    .logo {
-        margin: 0 0 18px;
-    }
-
-    .menu-label,
-    .sidebar-bottom {
+    .sidebar .logo,
+    .sidebar .menu-label,
+    .sidebar .sidebar-bottom {
         display: none;
     }
 
-    .nav-link {
-        display: inline-block;
-        margin: 0 5px 0 0;
-        padding: 10px;
+    .navigation {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .navigation .nav-link {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin: 0;
+        padding: 9px 2px;
+        font-size: 12px;
+        text-align: center;
+        white-space: nowrap;
     }
 
     .main-content {
-        margin-left: 0;
-        padding: 22px 16px;
+        padding: 22px 16px calc(100px + env(safe-area-inset-bottom));
     }
 
-    .topbar {
+    .setting-row {
         align-items: flex-start;
         flex-direction: column;
     }
 
-    h1 {
-        font-size: 28px;
-    }
-
-    .summary-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .summary-card h2 {
-        font-size: 28px;
-    }
-
-    .transactions-panel,
-    .form-panel {
-        padding: 17px;
-    }
-
-    .form-panel form {
-        grid-template-columns: 1fr;
+    .setting-row select {
+        width: 100%;
+        max-width: none;
     }
 }
 
@@ -587,4 +592,296 @@ tbody tr:last-child td {
     margin: 12px 0 0;
     font-size: 14px;
     opacity: 0.85;
+}
+/* Mobile bottom navigation */
+.navigation {
+    display: flex;
+    flex-direction: column;
+}
+
+.navigation .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+/* Settings */
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting-row:last-child {
+    border-bottom: none;
+}
+
+.setting-row strong {
+    font-size: 15px;
+}
+
+.setting-row p {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 6px 0 0;
+}
+
+.setting-row select {
+    max-width: 160px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* Settings acts as its own view */
+body.settings-open .main-content > :not(#settings) {
+    display: none;
+}
+
+body.settings-open #settings {
+    display: block;
+}
+
+/* Theme variables */
+body.dark-theme {
+    color-scheme: dark;
+    --background: #0b1120;
+    --surface: #151e30;
+    --text: #e5e7eb;
+    --muted: #a0aec0;
+    --border: #2b364a;
+}
+
+body.dark-theme .nav-link {
+    color: #c0cad9;
+}
+
+body.dark-theme .nav-link:hover,
+body.dark-theme .nav-link.active {
+    background: #29264f;
+    color: #aaa5ff;
+}
+
+body.dark-theme .summary-card,
+body.dark-theme .account-card,
+body.dark-theme .transactions-panel,
+body.dark-theme .form-panel {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+body.dark-theme .refresh-button,
+body.dark-theme .form-panel input,
+body.dark-theme .form-panel select {
+    background: #101827;
+    color: var(--text);
+    border-color: var(--border);
+}
+
+body.dark-theme tbody td {
+    border-color: var(--border);
+}
+
+body.dark-theme .account-card .card-note,
+body.dark-theme .add-account-card .card-note {
+    color: var(--muted);
+}
+
+body.dark-theme .add-account-card:hover,
+body.dark-theme .refresh-button:hover {
+    background: #202b40;
+}
+
+body.dark-theme .sidebar {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+body.dark-theme .avatar {
+    background: #29264f;
+    color: #aaa5ff;
+}
+
+/* Mobile layout */
+@media (max-width: 720px) {
+    .sidebar {
+        position: fixed;
+        z-index: 1000;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+        border-right: none;
+        border-top: 1px solid var(--border);
+        display: block;
+        background: var(--surface);
+    }
+
+    .sidebar .logo,
+    .sidebar .menu-label,
+    .sidebar .sidebar-bottom {
+        display: none;
+    }
+
+    .navigation {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 4px;
+    }
+
+    .navigation .nav-link {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin: 0;
+        padding: 9px 2px;
+        font-size: 11px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .main-content {
+        padding: 22px 16px calc(100px + env(safe-area-inset-bottom));
+    }
+
+    .setting-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .setting-row select {
+        width: 100%;
+        max-width: none;
+    }
+}
+/* Settings page visibility */
+body.settings-open .main-content > :not(#settings) {
+    display: none;
+}
+
+body.settings-open #settings {
+    display: block;
+}
+
+/* Keep settings above other content */
+#settings {
+    scroll-margin-top: 24px;
+}
+@media (max-width: 720px) {
+    .sidebar {
+        z-index: 9999;
+    }
+
+    .navigation,
+    .navigation .nav-link {
+        pointer-events: auto;
+        position: relative;
+    }
+}
+
+
+/* Fix mobile layout */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        position: fixed;
+        z-index: 9999;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+        border-right: none;
+        border-top: 1px solid var(--border);
+        background: var(--surface);
+    }
+
+    .main-content {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 20px 14px calc(100px + env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions button {
+        max-width: 100%;
+    }
+
+    .summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .transactions-panel,
+    .form-panel,
+    .main-account-card {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    .navigation {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .navigation .nav-link {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 2px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
 }

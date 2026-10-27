@@ -11,35 +11,52 @@
 <aside class="sidebar">
     <h2 class="logo">FinTrack<span>.</span></h2>
 
-    <p class="menu-label">MENU</p>
-    <a class="nav-link active" href="#">▦ &nbsp; Dashboard</a>
-    <a class="nav-link" href="#transactions">↔ &nbsp; Transactions</a>
+    <p class="menu-label" data-i18n="menu">MENU</p>
+
+
+    <nav class="navigation">
+        <a class="nav-link active" href="#dashboard" data-page="dashboard">
+            ▦ <span data-i18n="dashboard">Dashboard</span>
+        </a>
+
+        <a class="nav-link" href="#transactions" data-page="transactions">
+            ↔ <span data-i18n="transactions">Transactions</span>
+        </a>
+
+        <a class="nav-link" href="#settings" data-page="settings">
+            ⚙ <span data-i18n="settings">Settings</span>
+        </a>
+    </nav>
 
     <div class="sidebar-bottom">
         <div class="avatar">S</div>
         <div>
             <strong>My Finance</strong>
-            <p>Personal account</p>
+            <p data-i18n="personalAccount">Personal account</p>
         </div>
     </div>
 </aside>
 
-<main class="main-content">
+<main class="main-content" id="dashboard">
     <header class="topbar">
         <div>
-            <p class="eyebrow">OVERVIEW</p>
-            <h1>Dashboard</h1>
-            <p class="subtitle">Welcome back! Here's your financial overview.</p>
+            <p class="eyebrow" data-i18n="overview">OVERVIEW</p>
+            <h1 data-i18n="dashboard">Dashboard</h1>
+            <p class="subtitle" data-i18n="welcome">
+                Welcome back! Here's your financial overview.
+            </p>
         </div>
         <div class="header-actions">
-            <button class="primary-button" id="addTransactionBtn">+ Add transaction</button>
-        </div>
+            <button class="primary-button" id="addTransactionBtn"
+                    data-i18n="addTransaction">+ Add transaction</button>        </div>
     </header>
 
 
     <section class="main-account-section">
         <div class="main-account-card">
-            <p class="main-account-label">MAIN ACCOUNT</p>
+            <p class="main-account-label" data-i18n="mainAccount">
+                MAIN ACCOUNT
+            </p>
             <h2 id="mainAccountBalance">0.00 MKD</h2>
             <p class="main-account-description">
                 Total balance across all your accounts and cash
@@ -48,8 +65,10 @@
     </section>
 
     <section>
-        <h2>My Accounts</h2>
-        <p class="subtitle">Your banks, cash and crypto wallets</p>
+        <h2 data-i18n="myAccounts">My Accounts</h2>
+        <p class="subtitle" data-i18n="accountsDescription">
+            Your banks, cash and crypto wallets
+        </p>
 
         <div class="summary-grid" id="accountsGrid"></div>
     </section>
@@ -58,10 +77,11 @@
     <section class="transactions-panel" id="transactions">
         <div class="panel-header">
             <div>
-                <h2>Recent transactions</h2>
-                <p>Your latest financial activity</p>
+                <h2 data-i18n="recentTransactions">Recent transactions</h2>
+                <p data-i18n="latestActivity">Your latest financial activity</p>
             </div>
-            <button class="refresh-button" id="refreshBtn">↻ Refresh</button>
+            <button class="refresh-button" id="refreshBtn"
+                    data-i18n="refresh">↻ Refresh</button>
         </div>
 
         <div class="table-wrapper">
@@ -160,7 +180,43 @@
             <p id="formMessage" class="status-message"></p>
         </form>
     </section>
+
+
+    <section class="form-panel settings-panel hidden" id="settings">
+        <div class="panel-header">
+            <div>
+                <h2 data-i18n="settings">Settings</h2>
+                <p data-i18n="customize">Customize your application</p>
+            </div>
+        </div>
+
+        <div class="setting-row">
+            <div>
+                <strong data-i18n="appearance">Appearance</strong>
+                <p data-i18n="themeDescription">Choose light or dark theme</p>
+            </div>
+
+            <select id="themeSelect" aria-label="Theme">
+                <option value="light" data-i18n="lightTheme">Light</option>
+                <option value="dark" data-i18n="darkTheme">Dark</option>
+            </select>
+        </div>
+
+        <div class="setting-row">
+            <div>
+                <strong data-i18n="language">Language</strong>
+                <p data-i18n="languageDescription">Choose your preferred language</p>
+            </div>
+
+            <select id="languageSelect" aria-label="Language">
+                <option value="en">English</option>
+                <option value="mk">Македонски</option>
+            </select>
+        </div>
+    </section>
 </main>
+
+
 
 <script src="app.js"></script>
 </body>
