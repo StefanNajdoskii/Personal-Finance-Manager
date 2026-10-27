@@ -2,7 +2,7 @@
 
 Web application for tracking personal finances: bank, cash and crypto accounts, income and expenses, and a total balance across everything.
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](videoScr/Dashboard.png)
 
 ## Features
 - Dashboard with total balance and all accounts
