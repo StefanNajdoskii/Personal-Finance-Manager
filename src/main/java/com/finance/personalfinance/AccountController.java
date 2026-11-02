@@ -1,7 +1,7 @@
-
 package com.finance.personalfinance;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,21 +15,25 @@ public class AccountController {
 
     private final AccountRepository repository;
     private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
 
     public AccountController(
             AccountRepository repository,
-            TransactionRepository transactionRepository) {
+            TransactionRepository transactionRepository,
+            UserRepository userRepository) {
         this.repository = repository;
         this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
-    public List<Account> getAllAccounts() {
-        return repository.findAll();
+    public List<Account> getAllAccounts(Authentication authentication) {
+        User user = currentUser(authentication);
+        return repository.findByOwnerId(user.getId());
     }
 
     @PostMapping
-    public Account createAccount(@RequestBody Account account) {
+    public Account createAccount(@RequestBody Account account, Authentication authentication) {
 
         if (account.getName() == null || account.getName().isBlank()) {
             throw new ResponseStatusException(
@@ -63,14 +67,20 @@ public class AccountController {
             account.setInstitution(account.getInstitution().trim());
         }
 
+        // Always owned by the logged-in user, never by a client-supplied value
+        account.setOwner(currentUser(authentication));
+
         return repository.save(account);
     }
 
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void deleteAccount(@PathVariable Long id) {
+    public void deleteAccount(@PathVariable Long id, Authentication authentication) {
+        User user = currentUser(authentication);
+
         Account account = repository.findById(id)
+                .filter(a -> a.isOwnedBy(user.getId()))
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Account not found"));
 
@@ -78,5 +88,9 @@ public class AccountController {
         repository.delete(account);
     }
 
-
+    private User currentUser(Authentication authentication) {
+        return userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Not logged in"));
+    }
 }

@@ -1,7 +1,7 @@
-
 package com.finance.personalfinance;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,23 +16,29 @@ public class TransactionController {
 
     private final TransactionRepository repository;
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     public TransactionController(
             TransactionRepository repository,
-            AccountRepository accountRepository) {
+            AccountRepository accountRepository,
+            UserRepository userRepository) {
         this.repository = repository;
         this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return repository.findAll();
+    public List<Transaction> getAllTransactions(Authentication authentication) {
+        return repository.findByAccount_Owner_Id(currentUser(authentication).getId());
     }
 
     @PostMapping
     @Transactional
     public Transaction createTransaction(
-            @RequestBody Transaction transaction) {
+            @RequestBody Transaction transaction,
+            Authentication authentication) {
+
+        User user = currentUser(authentication);
 
         if (transaction.getAccount() == null
                 || transaction.getAccount().getId() == null) {
@@ -41,8 +47,10 @@ public class TransactionController {
                     "Account ID is required");
         }
 
+        // Only accounts owned by the logged-in user can be used
         Account account = accountRepository
                 .findById(transaction.getAccount().getId())
+                .filter(a -> a.isOwnedBy(user.getId()))
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Account not found"));
@@ -81,9 +89,11 @@ public class TransactionController {
     }
 
     @GetMapping("/summary")
-    public Map<String, BigDecimal> getSummary() {
-        BigDecimal income = repository.sumAmountByType("INCOME");
-        BigDecimal expenses = repository.sumAmountByType("EXPENSE");
+    public Map<String, BigDecimal> getSummary(Authentication authentication) {
+        Long ownerId = currentUser(authentication).getId();
+
+        BigDecimal income = repository.sumAmountByTypeAndOwner("INCOME", ownerId);
+        BigDecimal expenses = repository.sumAmountByTypeAndOwner("EXPENSE", ownerId);
         BigDecimal balance = income.subtract(expenses);
 
         return Map.of(
@@ -91,5 +101,11 @@ public class TransactionController {
                 "totalExpenses", expenses,
                 "balance", balance
         );
+    }
+
+    private User currentUser(Authentication authentication) {
+        return userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Not logged in"));
     }
 }

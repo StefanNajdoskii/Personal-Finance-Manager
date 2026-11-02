@@ -1,6 +1,7 @@
 
 package com.finance.personalfinance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -26,7 +27,26 @@ public class Account {
 
     private String institution; // Example: Sparkasse, NLB, Binance
 
+    // Nullable so accounts created before login existed can still be loaded.
+    // Those legacy accounts have no owner and are not visible to any user.
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    @JsonIgnore // never serialize the owner (it contains the password hash)
+    private User owner;
+
     public Account() {
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public boolean isOwnedBy(Long userId) {
+        return owner != null && owner.getId().equals(userId);
     }
 
     public Long getId() {

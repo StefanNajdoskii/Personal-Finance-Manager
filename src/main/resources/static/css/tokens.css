@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Design tokens. Every colour, size, radius, shadow and timing used by the
+   app lives here. Dark is the default; [data-theme="light"] overrides.
+   ========================================================================== */
+
+:root {
+    /* Typography */
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --fs-xs: 12px;
+    --fs-sm: 13px;
+    --fs-base: 14px;
+    --fs-md: 16px;
+    --fs-lg: 20px;
+    --fs-xl: 28px;
+    --fs-hero: 40px;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    --fw-black: 800;
+    --lh-tight: 1.2;
+    --lh-base: 1.5;
+
+    /* Spacing: 8px grid with 4px half-step */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+
+    /* Radius */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 20px;
+    --radius-pill: 999px;
+
+    /* Layout */
+    --sidebar-w: 248px;
+    --sidebar-w-collapsed: 84px;
+
+    /* Motion */
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --dur-fast: 150ms;
+    --dur: 220ms;
+
+    /* Brand */
+    --accent-1: #7c5cff;
+    --accent-2: #3b82f6;
+    --accent: var(--accent-1);
+    --accent-gradient: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+    --accent-soft: rgba(124, 92, 255, 0.14);
+    --accent-text: #b4a6ff;
+    --on-accent: #ffffff;
+
+    /* Surfaces (dark) */
+    --bg: #070a12;
+    --bg-glow-1: rgba(124, 92, 255, 0.18);
+    --bg-glow-2: rgba(59, 130, 246, 0.12);
+    --surface: rgba(18, 24, 40, 0.72);
+    --surface-solid: #121828;
+    --surface-2: rgba(255, 255, 255, 0.035);
+    --surface-hover: rgba(255, 255, 255, 0.06);
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --border: rgba(148, 163, 184, 0.12);
+    --border-strong: rgba(148, 163, 184, 0.22);
+
+    /* Text */
+    --text: #e9edf6;
+    --text-muted: #8f9ab0;
+    --text-subtle: #5f6b84;
+
+    /* Semantic */
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.14);
+    --danger: #fb7185;
+    --danger-soft: rgba(251, 113, 133, 0.14);
+    --warning: #fbbf24;
+
+    /* Elevation */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 12px 32px -14px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 0.7);
+    --glow: 0 10px 40px -10px rgba(124, 92, 255, 0.55);
+    --focus-ring: 0 0 0 3px rgba(124, 92, 255, 0.55);
+    --chart-grid: rgba(148, 163, 184, 0.12);
+
+    color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+    --bg: #f4f6fb;
+    --bg-glow-1: rgba(124, 92, 255, 0.10);
+    --bg-glow-2: rgba(59, 130, 246, 0.08);
+    --surface: rgba(255, 255, 255, 0.84);
+    --surface-solid: #ffffff;
+    --surface-2: rgba(15, 23, 42, 0.03);
+    --surface-hover: rgba(15, 23, 42, 0.05);
+    --input-bg: #ffffff;
+    --border: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(15, 23, 42, 0.16);
+    --text: #0f172a;
+    --text-muted: #5b6678;
+    --text-subtle: #8a94a6;
+    --accent-text: #5b3fe0;
+    --accent-soft: rgba(124, 92, 255, 0.10);
+    --success: #059669;
+    --success-soft: rgba(5, 150, 105, 0.10);
+    --danger: #e11d48;
+    --danger-soft: rgba(225, 29, 72, 0.08);
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 12px 30px -16px rgba(15, 23, 42, 0.18);
+    --shadow-lg: 0 30px 60px -24px rgba(15, 23, 42, 0.25);
+    --glow: 0 10px 30px -12px rgba(124, 92, 255, 0.45);
+    --chart-grid: rgba(15, 23, 42, 0.08);
+    color-scheme: light;
+}
