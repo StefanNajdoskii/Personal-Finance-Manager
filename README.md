@@ -8,7 +8,7 @@
 
 | Dashboard | Transactions | AI assistant |
 |-----------|--------------|--------------|
-| _screenshot_ | _screenshot_ | _screenshot_ |
+| [_screenshot_](https://github.com/StefanNajdoskii/Personal-Finance-Manager/blob/main/videoScr/Dashboard.png) | _screenshot_ | _screenshot_ |
 
 ## Features
 
