@@ -1201,17 +1201,164 @@ dialog.sheet.sheet-sm {
 /* ---------- Auth card ---------- */
 
 .auth-card {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    max-width: 420px;
-    padding: var(--space-6);
-    border-radius: 24px;
+    max-width: 440px;
+    padding: 36px 32px 32px;
+    border-radius: 28px;
+    border: 1px solid transparent;
+    background:
+        linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box,
+        var(--accent-gradient) border-box;
+    box-shadow: var(--shadow-lg), 0 0 80px -30px rgba(124, 92, 255, 0.55);
     animation: fade-slide-up 420ms var(--ease) both;
 }
 
+/* Soft colour blobs behind the card. Pure decoration, so they are hidden from screen readers. */
+.auth-glow {
+    position: fixed;
+    width: 46vmax;
+    height: 46vmax;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+    animation: auth-float 16s ease-in-out infinite alternate;
+}
+
+.auth-glow-1 {
+    top: -18vmax;
+    left: -14vmax;
+    background: var(--accent-1);
+}
+
+.auth-glow-2 {
+    bottom: -20vmax;
+    right: -14vmax;
+    background: var(--accent-2);
+    animation-delay: -8s;
+}
+
+@keyframes auth-float {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(4vmax, 3vmax) scale(1.08); }
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.auth-brand .brand-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+}
+
+.auth-brand .brand-name {
+    font-size: 18px;
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.01em;
+}
+
+.auth-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
 .auth-subtitle {
-    margin: var(--space-3) 0 var(--space-5);
+    margin: 8px 0 24px;
     color: var(--text-muted);
     font-size: var(--fs-sm);
+    line-height: 1.5;
+}
+
+/* "Remember me" checkbox */
+.check-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    cursor: pointer;
+    user-select: none;
+}
+
+.check-row input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.check-box {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: var(--input-bg);
+    color: var(--on-accent);
+    transition: background var(--dur-fast), border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.check-box svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+    transition: opacity var(--dur-fast);
+}
+
+.check-row input:checked + .check-box {
+    background: var(--accent-gradient);
+    border-color: transparent;
+}
+
+.check-row input:checked + .check-box svg {
+    opacity: 1;
+}
+
+.check-row input:focus-visible + .check-box {
+    box-shadow: var(--focus-ring);
+}
+
+/* Password strength meter (registration) */
+.pw-meter {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.pw-meter span {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--border-strong);
+    transition: background var(--dur-fast);
+}
+
+.pw-meter[data-level="1"] span:nth-child(-n+1) { background: var(--danger); }
+.pw-meter[data-level="2"] span:nth-child(-n+2) { background: #f59e0b; }
+.pw-meter[data-level="3"] span:nth-child(-n+3) { background: #38bdf8; }
+.pw-meter[data-level="4"] span:nth-child(-n+4) { background: var(--success); }
+
+.pw-meter-label {
+    margin: 6px 0 0;
+    min-height: 16px;
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
 }
 
 .auth-form {
@@ -1358,4 +1505,327 @@ body.sidebar-collapsed .bottom-nav .nav-link span {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+/* Dark mode: account type and currency are white for readability */
+[data-theme="dark"] .account-card .account-top p,
+[data-theme="dark"] .account-card .badge {
+    color: #ffffff;
+}
+
+/* Native dropdown lists: use the theme surface so options are readable in dark mode */
+select option,
+select optgroup {
+    background-color: var(--surface-solid);
+    color: var(--text);
+}
+
+/* ---------- Forgot password, recovery code ---------- */
+
+.link-btn {
+    display: block;
+    margin: 14px auto 0;
+    padding: 6px 8px;
+    border: 0;
+    background: none;
+    color: var(--accent-text);
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+.recovery-panel {
+    display: grid;
+    gap: 16px;
+}
+
+.recovery-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.01em;
+}
+
+.recovery-panel .auth-subtitle {
+    margin: 0;
+}
+
+.recovery-code {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px dashed var(--accent-text);
+    background: var(--accent-soft);
+}
+
+.recovery-code code {
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 18px;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.08em;
+    color: var(--text);
+    word-break: break-all;
+    user-select: all;
+}
+
+.recovery-settings {
+    display: grid;
+    gap: 12px;
+    margin: 4px 0 16px;
+}
+
+.recovery-settings .recovery-code {
+    margin: 0;
+}
+
+/* ---------- AI assistant (floating chat, logged in only) ---------- */
+
+.assistant {
+    display: none;
+    position: fixed;
+    right: var(--space-5);
+    bottom: var(--space-5);
+    z-index: 150;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+body.logged-in .assistant {
+    display: flex;
+}
+
+.assistant-fab {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: var(--on-accent);
+    box-shadow: var(--glow), var(--shadow-md);
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast);
+}
+
+.assistant-fab:hover {
+    transform: translateY(-2px) scale(1.04);
+}
+
+.assistant-fab:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.assistant-fab svg {
+    width: 24px;
+    height: 24px;
+}
+
+.assistant-panel {
+    display: flex;
+    flex-direction: column;
+    width: min(380px, calc(100vw - 2 * var(--space-5)));
+    height: min(560px, 70vh);
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-solid);
+    box-shadow: var(--shadow-lg);
+    animation: fade-slide-up 220ms var(--ease) both;
+}
+
+.assistant-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.assistant-head strong {
+    display: block;
+    font-size: var(--fs-md);
+}
+
+.assistant-head p {
+    margin: 2px 0 0;
+    font-size: var(--fs-xs);
+}
+
+.assistant-messages {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.msg-bot {
+    align-self: flex-start;
+    border: 1px solid var(--border);
+    background: var(--surface-hover);
+    color: var(--text);
+    border-bottom-left-radius: 6px;
+}
+
+.msg-user {
+    align-self: flex-end;
+    background: var(--accent-gradient);
+    color: var(--on-accent);
+    border-bottom-right-radius: 6px;
+}
+
+.msg-error {
+    align-self: flex-start;
+    border: 1px solid transparent;
+    background: var(--danger-soft);
+    color: var(--danger);
+    border-bottom-left-radius: 6px;
+}
+
+.msg-thinking {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+}
+
+.dots {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: dot-bounce 1.2s infinite ease-in-out both;
+}
+
+.dots i:nth-child(2) { animation-delay: 0.15s; }
+.dots i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dot-bounce {
+    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+    40%           { opacity: 1;    transform: translateY(-3px); }
+}
+
+.assistant-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.assistant-form input {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--input-bg);
+    color: var(--text);
+    font: inherit;
+    font-size: var(--fs-sm);
+}
+
+.assistant-form input::placeholder {
+    color: var(--text-subtle);
+}
+
+.assistant-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: var(--focus-ring);
+}
+
+.assistant-form input:disabled,
+.assistant-form .btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.assistant-form .btn {
+    height: 42px;
+    padding: 0 16px;
+}
+
+@media (max-width: 899px) {
+    .assistant {
+        right: var(--space-3);
+        bottom: 96px; /* above the mobile bottom navigation */
+    }
+
+    .assistant-panel {
+        height: min(520px, 65vh);
+    }
+}
+
+/* ---------- AI assistant: suggested question chips ---------- */
+
+.assistant-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px 0;
+}
+
+.assistant-chip {
+    max-width: 100%;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface-hover);
+    color: var(--text-muted);
+    font: inherit;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    line-height: 1.35;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    transition: background var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.assistant-chip:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-text);
+}
+
+.assistant-chip:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.assistant-chip:disabled {
+    opacity: 0.5;
+    cursor: wait;
 }

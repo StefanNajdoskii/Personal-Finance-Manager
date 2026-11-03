@@ -47,9 +47,16 @@ async function request(url, { method = "GET", body } = {}) {
 
 export const api = {
     me: () => request("/api/auth/me"),
-    login: (username, password) => request("/api/auth/login", { method: "POST", body: { username, password } }),
+    login: (username, password, rememberMe = false) =>
+        request("/api/auth/login", { method: "POST", body: { username, password, rememberMe } }),
     register: (username, password) => request("/api/auth/register", { method: "POST", body: { username, password } }),
     logout: () => request("/api/auth/logout", { method: "POST" }),
+    resetPassword: (username, recoveryCode, newPassword) =>
+        request("/api/auth/reset", { method: "POST", body: { username, recoveryCode, newPassword } }),
+    regenerateRecoveryCode: () => request("/api/auth/recovery-code", { method: "POST" }),
+
+    // No client-side timeout: the model runs on CPU and can take a minute
+    ask: question => request("/api/ask", { method: "POST", body: { question } }),
 
     getAccounts: () => request("/api/accounts"),
     createAccount: account => request("/api/accounts", { method: "POST", body: account }),

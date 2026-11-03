@@ -30,11 +30,15 @@
 
 <!-- ================= Auth screen (only while logged out) ================= -->
 <div class="auth-screen" id="authScreen">
+    <div class="auth-glow auth-glow-1" aria-hidden="true"></div>
+    <div class="auth-glow auth-glow-2" aria-hidden="true"></div>
+
     <div class="auth-card glass">
-        <div class="brand brand-lg">
+        <div class="auth-brand">
             <span class="brand-mark"><i data-lucide="wallet" aria-hidden="true"></i></span>
-            <span>FinTrack</span>
+            <span class="brand-name">FinTrack</span>
         </div>
+        <h1 class="auth-title" id="authTitle" data-i18n="welcomeBack">Welcome back</h1>
         <p class="auth-subtitle" data-i18n="authSubtitle">Sign in to see your accounts, transactions and balances.</p>
 
         <div class="segmented" role="tablist" aria-label="Account">
@@ -59,8 +63,15 @@
                 <p class="field-error" aria-live="polite"></p>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px" data-i18n="login">Log in</button>
+            <label class="check-row">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <span class="check-box" aria-hidden="true"><i data-lucide="check"></i></span>
+                <span data-i18n="rememberMe">Remember me on this device</span>
+            </label>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 12px" data-i18n="login">Log in</button>
             <p class="form-message" id="loginMessage" role="alert"></p>
+            <button type="button" class="link-btn" id="showForgotBtn" data-i18n="forgotPassword">Forgot password?</button>
         </form>
 
         <form id="registerForm" class="auth-form" novalidate hidden>
@@ -80,6 +91,10 @@
                     <i data-lucide="eye" aria-hidden="true"></i>
                 </button>
                 <p class="field-error" aria-live="polite"></p>
+                <div class="pw-meter" id="pwMeter" data-level="0" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+                <p class="pw-meter-label" id="pwMeterLabel" aria-live="polite"></p>
             </div>
 
             <div class="field">
@@ -92,6 +107,51 @@
             <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px" data-i18n="createAccount">Create account</button>
             <p class="form-message" id="registerMessage" role="alert"></p>
         </form>
+
+        <form id="resetForm" class="auth-form" novalidate hidden>
+            <p class="auth-subtitle" data-i18n="resetHint">Enter your username, the recovery code you saved, and a new password.</p>
+
+            <div class="field">
+                <input id="resetUsername" name="username" placeholder=" " autocomplete="username" required>
+                <label for="resetUsername" data-i18n="username">Username</label>
+                <p class="field-error" aria-live="polite"></p>
+            </div>
+
+            <div class="field">
+                <input id="resetCode" name="recoveryCode" placeholder=" " autocomplete="off" spellcheck="false" required>
+                <label for="resetCode" data-i18n="recoveryCode">Recovery code</label>
+                <p class="field-error" aria-live="polite"></p>
+            </div>
+
+            <div class="field">
+                <input id="resetPassword" name="newPassword" type="password" placeholder=" "
+                       autocomplete="new-password" minlength="8" maxlength="100" required>
+                <label for="resetPassword" data-i18n="newPassword">New password</label>
+                <button type="button" class="pw-toggle" data-toggle-password="resetPassword"
+                        aria-label="Show password" aria-pressed="false" data-i18n-label="showPassword">
+                    <i data-lucide="eye" aria-hidden="true"></i>
+                </button>
+                <p class="field-error" aria-live="polite"></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px" data-i18n="resetPassword">Reset password</button>
+            <p class="form-message" id="resetMessage" role="alert"></p>
+            <button type="button" class="link-btn" id="backToLoginBtn" data-i18n="backToLogin">Back to log in</button>
+        </form>
+
+        <!-- Shown once after registration or a password reset. The code is never shown again. -->
+        <div class="recovery-panel" id="recoveryPanel" hidden>
+            <h2 class="recovery-title" data-i18n="recoveryTitle">Save your recovery code</h2>
+            <p class="auth-subtitle" data-i18n="recoveryExplain">If you forget your password, this code is the only way to reset it. Store it somewhere safe. It is shown only once.</p>
+            <div class="recovery-code">
+                <code id="recoveryCodeText"></code>
+                <button type="button" class="icon-btn" id="copyRecoveryBtn" aria-label="Copy" data-i18n-label="copy">
+                    <i data-lucide="copy" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p class="form-message" id="copyMessage" role="status"></p>
+            <button type="button" class="btn btn-primary btn-block" id="recoveryContinueBtn" data-i18n="recoveryContinue">I have saved it</button>
+        </div>
     </div>
 </div>
 
@@ -310,6 +370,18 @@
                             <p id="settingsUser"></p>
                         </div>
                     </div>
+                    <div class="recovery-settings">
+                        <p class="muted" data-i18n="settingsRecoveryHint">Generate a new recovery code. The old one stops working.</p>
+                        <button type="button" class="btn btn-ghost" id="regenerateRecoveryBtn" data-i18n="generateRecoveryCode">Generate recovery code</button>
+                        <div class="recovery-code" id="settingsRecoveryBox" hidden>
+                            <code id="settingsRecoveryCode"></code>
+                            <button type="button" class="icon-btn" id="copySettingsRecoveryBtn" aria-label="Copy" data-i18n-label="copy">
+                                <i data-lucide="copy" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <p class="form-message" id="settingsRecoveryMessage" role="status"></p>
+                    </div>
+
                     <button type="button" class="btn btn-ghost" id="settingsLogoutBtn">
                         <i data-lucide="log-out" aria-hidden="true"></i>
                         <span data-i18n="logout">Log out</span>
@@ -488,11 +560,51 @@
     </form>
 </dialog>
 
+<!-- ================= AI assistant (only while logged in, see assistant.js) ================= -->
+<div class="assistant" id="assistant">
+    <section class="assistant-panel glass" id="assistantPanel" aria-labelledby="assistantTitle" hidden>
+        <header class="assistant-head">
+            <div>
+                <strong id="assistantTitle" data-i18n="assistantTitle">Ask FinTrack</strong>
+                <p class="muted" data-i18n="assistantHint">Answers use only your transactions.</p>
+            </div>
+            <button type="button" class="icon-btn" id="assistantClose" data-i18n-label="assistantClose" aria-label="Close assistant">
+                <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <div class="assistant-messages" id="assistantMessages" role="log" aria-live="polite">
+            <div class="msg msg-bot" data-i18n="assistantWelcome">Hi! Ask me about your spending, income or balance.</div>
+        </div>
+
+        <div class="assistant-chips" aria-label="Suggested questions">
+            <button type="button" class="assistant-chip" data-i18n="chipTotal">How much did I spend in total?</button>
+            <button type="button" class="assistant-chip" data-i18n="chipBiggest">What was my biggest expense?</button>
+            <button type="button" class="assistant-chip" data-i18n="chipCategory">Which category do I spend the most on?</button>
+            <button type="button" class="assistant-chip" data-i18n="chipFood">How much did I spend on food?</button>
+            <button type="button" class="assistant-chip" data-i18n="chipEarn">Am I spending more than I earn?</button>
+            <button type="button" class="assistant-chip" data-i18n="chipLast5">What were my last 5 transactions?</button>
+        </div>
+
+        <form class="assistant-form" id="assistantForm" autocomplete="off">
+            <input id="assistantInput" type="text" maxlength="500" required
+                   data-i18n-placeholder="assistantPlaceholder" placeholder="Ask about your money…"
+                   aria-label="Your question">
+            <button type="submit" class="btn btn-primary" id="assistantSend" data-i18n="assistantSend">Send</button>
+        </form>
+    </section>
+
+    <button type="button" class="assistant-fab" id="assistantToggle" aria-expanded="false" aria-controls="assistantPanel"
+            data-i18n-label="assistantOpen" aria-label="Open AI assistant">
+        <i data-lucide="sparkles" aria-hidden="true"></i>
+    </button>
+</div>
+
 <div class="toast-stack" id="toasts" aria-live="polite"></div>
 
 <!-- Third-party libraries (CDN). The app still works without them; charts and icons just won't render. -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-<script type="module" src="js/main.js?v=5"></script>
+<script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>
