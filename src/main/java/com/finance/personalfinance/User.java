@@ -24,6 +24,9 @@ public class User {
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
 
+    // BCrypt hash of the one-time recovery code; null until the user generates one
+    private String recoveryCodeHash;
+
     public User() {
     }
 
@@ -42,6 +45,18 @@ public class User {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getRecoveryCodeHash() {
+        return recoveryCodeHash;
+    }
+
+    public void setRecoveryCodeHash(String recoveryCodeHash) {
+        this.recoveryCodeHash = recoveryCodeHash;
     }
 
     public String getRole() {

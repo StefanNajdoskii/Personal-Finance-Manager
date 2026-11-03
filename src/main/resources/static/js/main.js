@@ -4,10 +4,11 @@
 import { applyI18n, getLang, setLang, t } from "./i18n.js";
 import { resetState, state } from "./state.js";
 import { setUnauthorizedHandler } from "./api.js";
-import { checkSession, initAuth, logout } from "./auth.js";
+import { checkSession, initAuth, initSettingsRecovery, logout } from "./auth.js";
 import { initForms, openAddTransaction } from "./forms.js";
 import { clearFilters, initDashboard, loadAll, renderDashboard, renderLists } from "./dashboard.js";
 import { icon, refreshIcons, toast } from "./ui.js";
+import { initAssistant, resetAssistant } from "./assistant.js";
 
 const $ = id => document.getElementById(id);
 
@@ -179,6 +180,7 @@ function startApp(user) {
 
 function stopApp() {
     resetState();
+    resetAssistant();
 
     document.querySelectorAll("dialog[open]").forEach(dialog => dialog.close());
     $("globalSearch").value = "";
@@ -208,6 +210,8 @@ async function init() {
     initSearch();
     initActions();
     initLogout();
+    initSettingsRecovery();
+    initAssistant();
     initForms();
     initDashboard();
 
